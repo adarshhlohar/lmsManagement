@@ -910,7 +910,7 @@ CREATE TABLE CompanyRequirement (id INT AUTO_INCREMENT PRIMARY KEY,
 
 
       select * from CompanyRequirement;
-
+      
 
 CREATE TABLE CandidateStackAssignment (Id INT AUTO_INCREMENT PRIMARY KEY,
           RequirementId INT,CandidateId VARCHAR(20),
@@ -967,10 +967,63 @@ select * from hired_Candidate;
 select * from FellowshipCandidate;
 select * from CandidateStackAssignment;
 select * from CompanyRequirement;
+select * from TechStack;
 
-SELECT fc.CandidateId, fc.FirstName, fc.LastName
+SELECT fc.CandidateId,fc.FirstName,fc.LastName
 FROM FellowshipCandidate fc
 JOIN CandidateStackAssignment csa ON fc.CandidateId = csa.CandidateId
 JOIN CompanyRequirement cr ON csa.RequirementId = cr.Id
 JOIN TechStack ts ON cr.tech_stack_id = ts.Id
 WHERE ts.TechName = 'Java';
+
+select * from fellowshipCandidate where Candidateid in (SELECT CandidateId from candidateStackAssignment where requirementId in  (select id from companyRequirement WHERE Tech_stack_id = (select id from techStack where techName = 'java')));
+
+select * from mentor;
+select * from MentorIdeationMap;
+select * from mentorTechStack;
+select * from Techstack;
+
+select m.Name 
+from mentor m
+join mentorTechStack mtc on mtc.Id = m.Id
+join techStack ts on mtc.TechStackId = ts.id
+where ts.Techname = "java";
+
+
+select * from FellowshipCandidate;
+select * from Techstack;
+select * from CandidateStackAssignment;
+select * from CompanyRequirement; 
+select * from Company;
+
+
+select f.CandidateId, f.FirstName, f.LastName 
+from  FellowshipCandidate f
+JOIN CandidateStackAssignment csa ON f.CandidateId = csa.CandidateId
+JOIN CompanyRequirement cr ON csa.RequirementId = cr.Id
+JOIN TechStack ts ON cr.tech_stack_id = ts.Id;
+
+SELECT f.CandidateId, f.FirstName, f.LastName 
+FROM FellowshipCandidate f
+WHERE NOT EXISTS (
+    SELECT 1 
+    FROM CandidateStackAssignment csa 
+    JOIN CandidateStackAssignment csa ON f.CandidateId = csa.CandidateId
+    JOIN CompanyRequirement cr ON csa.RequirementId = cr.Id
+    JOIN TechStack ts ON cr.tech_stack_id = ts.Id
+    WHERE f.CandidateId = csa.CandidateId
+);
+
+
+select * from candidatedocuments;
+
+SELECT f.CandidateId, f.FirstName, f.LastName 
+FROM FellowshipCandidate f
+WHERE NOT EXISTS (
+		 SELECT 1 
+         from FellowshipCandidate
+         JOIN candidatedocuments cd on f.CandidateId = cd.CandidateId
+);
+	
+
+show tables;
